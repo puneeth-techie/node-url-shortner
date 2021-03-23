@@ -1,6 +1,6 @@
 import app from './startup/app.js'
 import http from 'http'
-import connectDB from '.startup/db.js'
+import connectDB from './startup/db.js'
 
 //init server
 const server = http.createServer(app);
