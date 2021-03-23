@@ -1,4 +1,4 @@
-import nanid from 'nanoid'
+import { nanoid } from 'nanoid'
 import validUrl from 'valid-url'
 import createError from 'http-errors'
 import Url from '../models/urlModel.js'

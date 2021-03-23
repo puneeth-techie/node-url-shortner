@@ -19,12 +19,12 @@ if(process.env.NODE_ENV === 'development'){
   app.use(morgan('dev'))
 }
 
-//errorHandler
-app.use(notFound)
-app.use(errorFound)
-
 //route handler
 app.use('/api/url', urlShorten)
 app.use('/', getOriginalUrl)
+
+//errorHandler
+app.use(notFound)
+app.use(errorFound)
 
 export default app;

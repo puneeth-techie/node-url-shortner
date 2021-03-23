@@ -3,9 +3,9 @@ import express from 'express'
 
 const router = express.Router();
 
-// @route     GET /
+// @route     GET /:code
 // @desc      Redirecting to Original URL from Shortned URL
 // @access    public
-router.route('/').get(getOriginalUrl)
+router.route('/:code').get(getOriginalUrl)
 
 export default router
