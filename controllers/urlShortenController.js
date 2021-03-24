@@ -1,47 +1,48 @@
-import { nanoid } from 'nanoid'
-import validUrl from 'valid-url'
-import createError from 'http-errors'
-import Url from '../models/urlModel.js'
+import { nanoid } from "nanoid";
+import validUrl from "valid-url";
+import createError from "http-errors";
+import Url from "../models/urlModel.js";
 
 const urlShorten = async (req, res, next) => {
-  const { longUrl } = req.body
-  const baseUrl = process.env.BASE_URL
+  const { longUrl } = req.body;
+  const baseUrl = process.env.BASE_URL;
 
   //checking the base url
-  if(!validUrl.isUri(baseUrl)){
-    createError(401, 'Invalid base url.')
+  if (!validUrl.isUri(baseUrl)) {
+    throw createError(401, "Invalid base url.");
   }
 
   //create a short code
   const urlCode = nanoid(6);
 
   //checking long url and generating shorten url
-  if(validUrl.isUri(longUrl)){
-    try{
+  if (validUrl.isUri(longUrl)) {
+    try {
       //checking if url is exist
-      let url = await Url.findOne({ longUrl })
-      if(url){
+      let url = await Url.findOne({ longUrl });
+      if (url) {
         res.json(url);
-      }else{
+      } else {
         //constructing the URL
-        const shortUrl = baseUrl + '/' + urlCode
+        const shortUrl = baseUrl + "/" + urlCode;
         url = await new Url({
           urlCode,
           longUrl,
           shortUrl,
-          date: new Date()
-        })
+          date: new Date(),
+        });
 
         //saving to the DB
         await url.save();
-        res.json(url)
+        res.json(url);
       }
-    }catch(error){
-      createError(500, error)
+    } catch (error) {
+      next(error);
     }
-  }else{
-    createError(401, "Invalid URL.")
+  } else {
+    const error = createError(401, "Invalid URL.");
+    next(error);
   }
-}
+};
 
-export { urlShorten }
+export { urlShorten };
